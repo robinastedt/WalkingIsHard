@@ -11,6 +11,7 @@ import com.astedt.robin.walkingishard.walker.Joint;
 import com.astedt.robin.walkingishard.walker.Muscle;
 import com.astedt.robin.walkingishard.walker.Walker;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JComponent;
@@ -22,11 +23,13 @@ import javax.swing.JComponent;
 public class DrawingComponent extends JComponent {
     
     private final Main main;
+    private final Font fontStats;
     
     private double xScroll = Config.WALKER_SPAWN_X;
     
     public DrawingComponent(Main main) {
         this.main = main;
+        fontStats = new Font("Courier New", Font.PLAIN, 14);
     }
     
     @Override
@@ -141,6 +144,32 @@ public class DrawingComponent extends JComponent {
                 }
 
                 xScroll = xTotal / walker.joints.size();
+                
+                g.setColor(Color.white);
+                g.setFont(fontStats);
+                
+                g.drawString("Generation: " 
+                        + String.format("%4d", main.generation+1) 
+                        + ": Walker: "
+                        + String.format("%4d", main.activeWalkerIndex+1)
+                        + "/"
+                        + String.format("%4d", main.walkers.size()), 
+                        10, getHeight() - fontStats.getSize() * 6);
+                g.drawString("Current walker's best distance:   " 
+                        + String.format("%.4f", main.walkers.get(main.activeWalkerIndex).travelledMax), 
+                        10, getHeight() - fontStats.getSize() * 5);
+                g.drawString("Average distance this generation: " 
+                        + String.format("%.4f", main.distanceAverageGeneration), 
+                        10, getHeight() - fontStats.getSize() * 4);
+                g.drawString("Best average distance ever:       " 
+                        + String.format("%.4f", main.distanceAverageGenerationRecord), 
+                        10, getHeight() - fontStats.getSize() * 3);
+                g.drawString("Best distance this generation:    " 
+                        + String.format("%.4f", main.distanceRecordGeneration), 
+                        10, getHeight() - fontStats.getSize() * 2);
+                g.drawString("Best distance ever:               " 
+                        + String.format("%.4f", main.distanceRecord), 
+                        10, getHeight() - fontStats.getSize() * 1);
             }
         }
         

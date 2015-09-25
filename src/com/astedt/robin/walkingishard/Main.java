@@ -32,11 +32,11 @@ public class Main extends JFrame {
     
     public boolean timeSlow;
     
-    private double distanceRecord;
-    private double distanceRecordGeneration;
+    public double distanceRecord;
+    public double distanceRecordGeneration;
     private double distanceTotalGeneration;
-    private double distanceAverageGeneration;
-    private double distanceAverageGenerationRecord;
+    public double distanceAverageGeneration;
+    public double distanceAverageGenerationRecord;
     
     public static void main(String[] args) {
         Main window = new Main();
