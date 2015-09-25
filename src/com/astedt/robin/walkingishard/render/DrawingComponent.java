@@ -35,7 +35,7 @@ public class DrawingComponent extends JComponent {
     @Override
     public void paintComponent(Graphics graphics) {
         synchronized (main) {
-            if (main.running) {
+            if (main.running && main.render) {
                 Graphics2D g = (Graphics2D) graphics;
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, getWidth(), getHeight());

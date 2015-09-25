@@ -26,6 +26,9 @@ public class KeyHandler extends KeyAdapter {
         if (keyCode == KeyEvent.VK_SPACE) {
             main.timeSlow ^= true;
         }
+        else if (keyCode == KeyEvent.VK_R) {
+            main.render ^= true;
+        }
     }
             
 }

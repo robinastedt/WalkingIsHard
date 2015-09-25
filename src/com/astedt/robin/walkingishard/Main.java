@@ -31,6 +31,7 @@ public class Main extends JFrame {
     private long time;
     
     public boolean timeSlow;
+    public boolean render;
     
     public double distanceRecord;
     public double distanceRecordGeneration;
@@ -61,7 +62,7 @@ public class Main extends JFrame {
             synchronized (this) {
                 step();
             }
-            repaint();
+            if (render) repaint();
             if (timeSlow) {
                 try {
                     Thread.sleep(20);
@@ -81,6 +82,7 @@ public class Main extends JFrame {
         random = new Random();
         time = 0;
         timeSlow = true;
+        render = true;
         world = new World(random.nextLong(), Config.WORLD_OCTAVES, Config.WORLD_FREQUENCY);
         activeWalkerIndex = 0;
         generation = 0;
