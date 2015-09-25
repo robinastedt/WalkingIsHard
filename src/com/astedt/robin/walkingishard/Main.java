@@ -149,7 +149,9 @@ public class Main extends JFrame {
                 distanceTotalGeneration = 0.0;
                 distanceRecordGeneration = 0.0;
                 activeWalkerIndex = 0;
-                world = new World(random.nextLong(), Config.WORLD_OCTAVES, Config.WORLD_FREQUENCY);
+                if (Config.RENEW_WORLD_EVERY_GENERATION) {
+                    world = new World(random.nextLong(), Config.WORLD_OCTAVES, Config.WORLD_FREQUENCY);
+                }
                 walkers = GeneticAlgorithm.createPopulation(random, walkers);
                 
             }

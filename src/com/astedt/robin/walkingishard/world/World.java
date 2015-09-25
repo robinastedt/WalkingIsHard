@@ -5,6 +5,7 @@
  */
 package com.astedt.robin.walkingishard.world;
 
+import com.astedt.robin.walkingishard.Config;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -46,7 +47,7 @@ public class World {
         int x1 = (int)xScaled;
         int x2 = x1 + 1;
         double weight = (xScaled - x1);
-        return (1.0 - weight) * getIntPoint(x1) + weight * getIntPoint(x2);
+        return Math.atan((x - Config.WALKER_SPAWN_X)) / Math.PI * 2  * ((1.0 - weight) * getIntPoint(x1) + weight * getIntPoint(x2));
     }
     
     private double getIntPoint(int i) {
