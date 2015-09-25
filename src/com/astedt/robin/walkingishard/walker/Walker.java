@@ -30,11 +30,14 @@ public class Walker implements Comparable {
     public double travelledMax;
     public double lastDistanceRecordTime;
     
+    public boolean alive;
+    
     public Walker(Random random) {
         this(new Genome(random));
     }
     
     public Walker(Genome genome) {
+        alive = true;
         travelledMax = 0.0;
         this.genome = genome;
         joints = new ArrayList<>();
@@ -205,6 +208,9 @@ public class Walker implements Comparable {
                 joint.y = world.getPoint(joint.x) - joint.r;
                 joint.yv = -joint.yv * Config.COLLISION_ENERGY_CONSERVATION;
                 joint.xv -= joint.xv * Config.FRICTION;
+                if (Config.KILL_ON_HEAD_COLLISION && joint.id == 0) {
+                    alive = false;
+                }
             }
             
             if (Math.abs(joint.xv) > 1.0) {

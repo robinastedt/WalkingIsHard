@@ -16,6 +16,7 @@ public class Config {
     public static final int POPULATION_SIZE = 250;
     public static final double FITNESS_BASE = 1.0;
     public static final boolean RENEW_WORLD_EVERY_GENERATION = false;
+    public static final boolean KILL_ON_HEAD_COLLISION = true;
     
     public static final double MUTATION_CHANGE_CONNECTION = 0.01;
     public static final double MUTATION_CHANGE_FREQUENCY = 0.01;

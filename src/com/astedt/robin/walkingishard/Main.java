@@ -108,7 +108,8 @@ public class Main extends JFrame {
         
         
         
-        if (time >= walkers.get(activeWalkerIndex).lastDistanceRecordTime + Config.EVAL_TIME_OUT) {
+        if (walkers.get(activeWalkerIndex).alive == false
+                || time >= walkers.get(activeWalkerIndex).lastDistanceRecordTime + Config.EVAL_TIME_OUT) {
             Walker lastWalker = walkers.get(activeWalkerIndex);
             
             if (lastWalker.travelledMax > distanceRecord) distanceRecord = lastWalker.travelledMax;
