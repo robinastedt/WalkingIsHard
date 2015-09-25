@@ -9,7 +9,6 @@ import com.astedt.robin.walkingishard.Config;
 import com.astedt.robin.walkingishard.util.Util;
 import com.astedt.robin.walkingishard.walker.Walker;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -28,7 +27,9 @@ public class GeneticAlgorithm {
         double[] fitnessThresholds = new double[oldWalkers.size()];
         int i = 0;
         for (Walker walker : oldWalkers){
-            totalFitness += Config.FITNESS_BASE + walker.travelledMax;
+            totalFitness += Config.FITNESS_BASE
+                    + walker.travelledMax
+                    + 1000.0 * walker.travelledMax / (walker.lastDistanceRecordTime + 1);
             fitnessThresholds[i++] = totalFitness;
         }
         

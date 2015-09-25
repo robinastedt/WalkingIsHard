@@ -36,7 +36,7 @@ public class Config {
     public static final double WALKER_SPAWN_X = 100.0;
     public static final double WALKER_SPAWN_Y = -1.0;
     
-    public static final int RANDOM_GENOME_ADD_JOINT_RATIO = 5;
+    public static final int RANDOM_GENOME_ADD_JOINT_RATIO = 2;
     public static final int RANDOM_GENOME_NOT_ADD_MUSCLE_RATIO = 2;
     public static final double RANDOM_GENE_RADIUS_MIN = 0.05;
     public static final double RANDOM_GENE_RADIUS_MAX = 0.2;
