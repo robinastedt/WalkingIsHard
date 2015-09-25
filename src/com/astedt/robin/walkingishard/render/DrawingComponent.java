@@ -149,8 +149,8 @@ public class DrawingComponent extends JComponent {
                 g.setFont(fontStats);
                 
                 g.drawString("Generation: " 
-                        + String.format("%4d", main.generation+1) 
-                        + ": Walker: "
+                        + String.format("%5d", main.generation+1) 
+                        + ":     Walker: "
                         + String.format("%4d", main.activeWalkerIndex+1)
                         + "/"
                         + String.format("%4d", main.walkers.size()), 
