@@ -13,18 +13,19 @@ public class Config {
     public static final double WORLD_FREQUENCY = 50;
     
     public static final long EVAL_TIME_OUT = 50 * 5;
-    public static final int POPULATION_SIZE = 250;
+    public static final int POPULATION_SIZE = 500;
     public static final double FITNESS_BASE = 1.0;
-    public static final boolean RENEW_WORLD_EVERY_GENERATION = false;
+    public static final boolean RENEW_WORLD_EVERY_GENERATION = true;
     public static final boolean KILL_ON_HEAD_COLLISION = true;
+    public static final double FITNESS_SPEED_FACTOR = 100.0;
     
-    public static final double MUTATION_CHANGE_CONNECTION = 0.01;
-    public static final double MUTATION_CHANGE_FREQUENCY = 0.01;
-    public static final double MUTATION_CHANGE_PHASE = 0.01;
-    public static final double MUTATION_CHANGE_STRENGTH = 0.01;
-    public static final double MUTATION_CHANGE_POSITION = 0.01;
-    public static final double MUTATION_REMOVE_GENE = 0.01;
-    public static final double MUTATION_ADD_GENE = 0.01;
+    public static final double MUTATION_CHANGE_CONNECTION = 0.02;
+    public static final double MUTATION_CHANGE_FREQUENCY = 0.02;
+    public static final double MUTATION_CHANGE_PHASE = 0.02;
+    public static final double MUTATION_CHANGE_STRENGTH = 0.02;
+    public static final double MUTATION_CHANGE_POSITION = 0.02;
+    public static final double MUTATION_REMOVE_GENE = 0.05;
+    public static final double MUTATION_ADD_GENE = 0.05;
     
     public static final double GRAVITY = 0.001;
     public static final double COLLISION_ENERGY_CONSERVATION = 0.25;

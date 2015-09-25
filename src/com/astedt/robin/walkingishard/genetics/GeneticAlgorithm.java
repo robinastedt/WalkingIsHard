@@ -29,7 +29,7 @@ public class GeneticAlgorithm {
         for (Walker walker : oldWalkers){
             totalFitness += Config.FITNESS_BASE
                     + walker.travelledMax
-                    + 1000.0 * walker.travelledMax / (walker.lastDistanceRecordTime + 1);
+                    + Config.FITNESS_SPEED_FACTOR * walker.travelledMax / (walker.lastDistanceRecordTime + 1);
             fitnessThresholds[i++] = totalFitness;
         }
         
