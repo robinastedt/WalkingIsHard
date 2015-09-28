@@ -4,9 +4,11 @@ package com.astedt.robin.walkingishard;
 import com.astedt.robin.walkingishard.genetics.GeneticAlgorithm;
 import com.astedt.robin.walkingishard.render.DrawingComponent;
 import com.astedt.robin.walkingishard.genetics.Genome;
+import com.astedt.robin.walkingishard.plot.Plot;
 import com.astedt.robin.walkingishard.walker.Joint;
 import com.astedt.robin.walkingishard.walker.Walker;
 import com.astedt.robin.walkingishard.world.World;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,7 @@ public class Main extends JFrame {
     public int activeWalkerIndex;
     public World world;
     public DrawingComponent dc;
+    private Plot plot;
     private long time;
     
     public boolean timeSlow;
@@ -39,6 +42,9 @@ public class Main extends JFrame {
     private double distanceTotalGeneration;
     public double distanceAverageGeneration;
     public double distanceAverageGenerationRecord;
+    
+   
+    
     
     public static void main(String[] args) {
         Main window = new Main();
@@ -92,12 +98,31 @@ public class Main extends JFrame {
         distanceTotalGeneration = 0.0;
         distanceAverageGeneration = 0.0;
         distanceAverageGenerationRecord = 0.0;
+        
+        plot = new Plot(
+        new String[] {
+            "Distance record",
+            "Distance record this generation",
+            "Distance average record",
+            "Distance average this generation"
+        },
+        new Color[] {
+            Color.RED.darker().darker(),
+            Color.RED,
+            Color.GREEN.darker().darker(),
+            Color.GREEN
+        });
+        
+        //distanceRecordList = new ArrayList<>();
+        //distanceRecordGenerationList = new ArrayList<>();
+        //distanceAverageGenerationList = new ArrayList<>();
+        //distanceAverageGenerationRecordList = new ArrayList<>();
         walkers = new ArrayList<>();
         
         for (int i = 0; i < Config.POPULATION_SIZE; i++) {
             walkers.add(new Walker(random));
         }
-        System.out.println("Generation " + generation + " is starting...");
+        
         running = true;
     }
     
@@ -139,6 +164,26 @@ public class Main extends JFrame {
                     distanceAverageGenerationRecord = distanceAverageGeneration;
                 }
                 
+                plot.addValue(0, distanceRecord);
+                plot.addValue(1, distanceRecordGeneration);
+                plot.addValue(2, distanceAverageGenerationRecord);
+                plot.addValue(3, distanceAverageGeneration);
+                
+                
+                //distanceAverageGenerationList.add(distanceAverageGeneration);
+                //distanceAverageGenerationRecordList.add(distanceAverageGenerationRecord);
+                //distanceRecordGenerationList.add(distanceRecordGeneration);
+                //distanceRecordList.add(distanceRecord);
+                
+                String genOutput 
+                        = "" + (generation+1) 
+                        + "," + distanceAverageGeneration
+                        + "," + distanceAverageGenerationRecord
+                        + "," + distanceRecordGeneration
+                        + "," + distanceRecord
+                        + "";
+                System.out.println(genOutput);
+                /*
                 System.out.println();
                 System.out.println("Generation " + generation + " has ended!");
                 System.out.println("Average distance this generation: " + String.format("%.5f", distanceAverageGeneration));
@@ -146,9 +191,9 @@ public class Main extends JFrame {
                 System.out.println("Best distance this generation:    " + String.format("%.5f", distanceRecordGeneration));
                 System.out.println("Best distance ever:               " + String.format("%.5f", distanceRecord));
                 System.out.println();
+                        */
                 generation++;
-                System.out.println("Generation " + generation + " is starting...");
-                System.out.println();
+                
                 
                 distanceTotalGeneration = 0.0;
                 distanceRecordGeneration = 0.0;
