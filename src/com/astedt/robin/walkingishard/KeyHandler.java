@@ -29,6 +29,14 @@ public class KeyHandler extends KeyAdapter {
         else if (keyCode == KeyEvent.VK_R) {
             main.render ^= true;
         }
+        else if (keyCode == KeyEvent.VK_LEFT) {
+            if (main.dc.xScrollOffset > -Config.WALKER_SPAWN_X + 1.1) {
+                main.dc.xScrollOffset -= 0.1;
+            }
+        }
+        else if (keyCode == KeyEvent.VK_RIGHT) {
+            main.dc.xScrollOffset += 0.1;
+        }
     }
             
 }

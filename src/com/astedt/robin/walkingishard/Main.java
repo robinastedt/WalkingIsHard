@@ -28,6 +28,7 @@ public class Main extends JFrame {
     public long generation;
     public int activeWalkerIndex;
     public World world;
+    public DrawingComponent dc;
     private long time;
     
     public boolean timeSlow;
@@ -44,9 +45,9 @@ public class Main extends JFrame {
         window.init();
         window.setTitle("Walking is hard");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        DrawingComponent DC = new DrawingComponent(window);
-        DC.setPreferredSize(new Dimension(Config.WIDTH, Config.HEIGHT));
-        window.add(DC);
+        window.dc = new DrawingComponent(window);
+        window.dc.setPreferredSize(new Dimension(Config.WIDTH, Config.HEIGHT));
+        window.add(window.dc);
         window.addKeyListener(new KeyHandler(window));
         window.setResizable(true);
         window.pack();

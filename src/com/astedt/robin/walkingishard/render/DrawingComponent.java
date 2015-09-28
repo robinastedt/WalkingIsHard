@@ -26,6 +26,7 @@ public class DrawingComponent extends JComponent {
     private final Font fontStats;
     
     private double xScroll = Config.WALKER_SPAWN_X;
+    public double xScrollOffset = 0.0;
     
     public DrawingComponent(Main main) {
         this.main = main;
@@ -46,6 +47,8 @@ public class DrawingComponent extends JComponent {
 
                 int scale = Math.min(getWidth(), getHeight()) / 2;
 
+                g.setFont(fontStats);
+                
                 g.setColor(Color.GRAY);
                 int segmentLineWidth = (int)(scale * 0.025);
                 int segmentLineHeight = (int)(scale * 0.25);
@@ -53,6 +56,7 @@ public class DrawingComponent extends JComponent {
                         + (int)(scale * (Math.ceil(xScroll - 1.0) - xScroll)) 
                         - segmentLineWidth / 2;
                 g.fillRect(segmentLineDrawX, 0, segmentLineWidth, segmentLineHeight);
+                g.drawString(Integer.toString((int)Math.ceil(xScroll - 1.0 - Config.WALKER_SPAWN_X)), segmentLineDrawX, segmentLineHeight+fontStats.getSize());
 
                 g.setColor(Color.GRAY);
                 int segment2LineWidth = (int)(scale * 0.025);
@@ -61,6 +65,7 @@ public class DrawingComponent extends JComponent {
                         + (int)(scale * (Math.ceil(xScroll) - xScroll)) 
                         - segment2LineWidth / 2;
                 g.fillRect(segment2LineDrawX, 0, segment2LineWidth, segment2LineHeight);
+                g.drawString(Integer.toString((int)Math.ceil(xScroll + 0.0 - Config.WALKER_SPAWN_X)), segment2LineDrawX, segment2LineHeight+fontStats.getSize());
 
                 g.setColor(Color.GRAY);
                 int segment3LineWidth = (int)(scale * 0.025);
@@ -69,6 +74,7 @@ public class DrawingComponent extends JComponent {
                         + (int)(scale * (Math.ceil(xScroll + 1.0) - xScroll)) 
                         - segment3LineWidth / 2;
                 g.fillRect(segment3LineDrawX, 0, segment3LineWidth, segment3LineHeight);
+                g.drawString(Integer.toString((int)Math.ceil(xScroll + 1.0 - Config.WALKER_SPAWN_X)), segment3LineDrawX, segment3LineHeight+fontStats.getSize());
 
                 g.setColor(Color.GRAY);
                 int segment4LineWidth = (int)(scale * 0.025);
@@ -77,6 +83,7 @@ public class DrawingComponent extends JComponent {
                         + (int)(scale * (Math.ceil(xScroll + 2.0) - xScroll)) 
                         - segment4LineWidth / 2;
                 g.fillRect(segment4LineDrawX, 0, segment4LineWidth, segment4LineHeight);
+                g.drawString(Integer.toString((int)Math.ceil(xScroll + 2.0 - Config.WALKER_SPAWN_X)), segment4LineDrawX, segment4LineHeight+fontStats.getSize());
 
                 g.setColor(Color.WHITE);
                 int startLineWidth = (int)(scale * 0.05);
@@ -98,9 +105,17 @@ public class DrawingComponent extends JComponent {
                 int positionLineWidth = (int)(scale * 0.0125);
                 int positionLineHeight = (int)(scale * 0.1);
                 int positionLineDrawX = scale 
-                        + (int)(scale * (0.0)) 
+                        + (int)(scale * (-xScrollOffset)) 
                         - positionLineWidth / 2;
                 g.fillRect(positionLineDrawX, 0, positionLineWidth, positionLineHeight);
+                
+                g.setColor(Color.GREEN);
+                int bestPositionLineWidth = (int)(scale * 0.05);
+                int bestPositionLineHeight = (int)(scale * 0.15);
+                int bestPositionLineDrawX = scale 
+                        + (int)(scale * (Config.WALKER_SPAWN_X + main.distanceRecord - xScroll)) 
+                        - bestPositionLineWidth / 2;
+                g.fillRect(bestPositionLineDrawX, 0, bestPositionLineWidth, bestPositionLineHeight);
 
 
 
@@ -132,7 +147,7 @@ public class DrawingComponent extends JComponent {
                 //Draw world
 
                 g.setColor(Color.white);
-                double wl = main.world.getWavelength();
+                double wl = main.world.getWavelength(xScroll);
                 double extraWidth = 2.0 * (getWidth() - getHeight()) / getHeight();
                 if (extraWidth < 0.0) extraWidth = 0.0;
                 for (double x1 = xScroll - 1.0; x1 <= xScroll + 1.0 + extraWidth; x1 += wl) {
@@ -143,7 +158,7 @@ public class DrawingComponent extends JComponent {
                     g.drawLine(scale + (int)(scale * (x1-xScroll)), scale + (int)(scale * y1), scale + (int)(scale * (x2 - xScroll)), scale + (int)(scale * y2));
                 }
 
-                xScroll = xTotal / walker.joints.size();
+                xScroll = xTotal / walker.joints.size() + xScrollOffset;
                 
                 g.setColor(Color.white);
                 g.setFont(fontStats);

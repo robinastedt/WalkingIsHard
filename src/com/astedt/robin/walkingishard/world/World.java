@@ -43,11 +43,12 @@ public class World {
     }
     
     public double getPoint(double x) {
-        double xScaled = x * frequency;
+        double xScaled = x * getFrequency(x);
         int x1 = (int)xScaled;
         int x2 = x1 + 1;
         double weight = (xScaled - x1);
         return Math.atan((x - Config.WALKER_SPAWN_X)) / Math.PI * 2  * ((1.0 - weight) * getIntPoint(x1) + weight * getIntPoint(x2));
+        //return ((1.0 - weight) * getIntPoint(x1) + weight * getIntPoint(x2));
     }
     
     private double getIntPoint(int i) {
@@ -78,11 +79,11 @@ public class World {
         return points.get(i);
     }
     
-    public double getFrequency() {
-        return frequency;
+    public double getFrequency(double x) {
+        return frequency * (x / Config.WORLD_FREQUENCY_DISTANCE_RATIO + 1.0);
     }
     
-    public double getWavelength() {
-        return wavelength;
+    public double getWavelength(double x) {
+        return wavelength / (x / Config.WORLD_FREQUENCY_DISTANCE_RATIO + 1.0);
     }
 }

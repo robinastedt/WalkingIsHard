@@ -10,14 +10,15 @@ public class Config {
     public static final int HEIGHT = 600;
     
     public static final int WORLD_OCTAVES = 8;
-    public static final double WORLD_FREQUENCY = 50;
+    public static final double WORLD_FREQUENCY = 10;
+    public static final double WORLD_FREQUENCY_DISTANCE_RATIO = 10.0;
     
     public static final long EVAL_TIME_OUT = 50 * 5;
     public static final int POPULATION_SIZE = 500;
     public static final double FITNESS_BASE = 1.0;
-    public static final boolean RENEW_WORLD_EVERY_GENERATION = true;
+    public static final boolean RENEW_WORLD_EVERY_GENERATION = false;
     public static final boolean KILL_ON_HEAD_COLLISION = true;
-    public static final double FITNESS_SPEED_FACTOR = 10.0;
+    public static final double FITNESS_SPEED_FACTOR = 100.0;
     
     public static final double MUTATION_CHANGE_CONNECTION = 0.02;
     public static final double MUTATION_CHANGE_FREQUENCY = 0.02;
@@ -35,7 +36,7 @@ public class Config {
     public static final double WALKER_MUSCLE_FORCE_MULTIPLIER = 0.25;
     public static final double WALKER_MUSCLE_FREQUENCY_MAX = Math.PI / 25;
     public static final double WALKER_SIZE_RATIO = 0.25;
-    public static final double WALKER_SPAWN_X = 100.0;
+    public static final double WALKER_SPAWN_X = 10.0;
     public static final double WALKER_SPAWN_Y = -1.0;
     
     public static final int RANDOM_GENOME_ADD_JOINT_RATIO = 2;
