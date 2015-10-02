@@ -32,7 +32,10 @@ public class Main extends JFrame {
     public World world;
     public DrawingComponent dc;
     private Plot plot;
+    private Config config;
     private long time;
+    
+    public boolean saveOnExit;
     
     public boolean timeSlow;
     public boolean render;
@@ -43,23 +46,38 @@ public class Main extends JFrame {
     public double distanceAverageGeneration;
     public double distanceAverageGenerationRecord;
     
-   
-    
     
     public static void main(String[] args) {
-        Main window = new Main();
-        window.init();
-        window.setTitle("Walking is hard");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.dc = new DrawingComponent(window);
-        window.dc.setPreferredSize(new Dimension(Config.WIDTH, Config.HEIGHT));
-        window.add(window.dc);
-        window.addKeyListener(new KeyHandler(window));
-        window.setResizable(true);
-        window.pack();
-        window.pack();
-        window.setVisible(true);
+        
+        /*boolean saveOnExit = false;
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equalsIgnoreCase("save")) {
+                saveOnExit = true;
+            }
+            System.out.println("Saving on exit: True");
+        }
+        */
+        Config config = new Config("config.properties");
+        config.load();
+        config.save();
+        Main window = new Main(config);
+        //window.saveOnExit = saveOnExit;
         window.run();
+    }
+    
+    public Main(Config config) {
+        this.config = config;
+        init();
+        setTitle("Walking is hard");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        dc = new DrawingComponent(this, config);
+        dc.setPreferredSize(new Dimension(config.WIDTH, config.HEIGHT));
+        add(dc);
+        addKeyListener(new KeyHandler(this, config));
+        setResizable(true);
+        pack();
+        pack();
+        setVisible(true);
     }
     
     private void run() {
@@ -90,7 +108,7 @@ public class Main extends JFrame {
         time = 0;
         timeSlow = true;
         render = true;
-        world = new World(random.nextLong(), Config.WORLD_OCTAVES, Config.WORLD_FREQUENCY);
+        world = new World(config, random.nextLong());
         activeWalkerIndex = 0;
         generation = 0;
         distanceRecord = 0.0;
@@ -99,7 +117,7 @@ public class Main extends JFrame {
         distanceAverageGeneration = 0.0;
         distanceAverageGenerationRecord = 0.0;
         
-        plot = new Plot(
+        plot = new Plot(config,
         new String[] {
             "Distance record",
             "Distance record this generation",
@@ -119,8 +137,8 @@ public class Main extends JFrame {
         //distanceAverageGenerationRecordList = new ArrayList<>();
         walkers = new ArrayList<>();
         
-        for (int i = 0; i < Config.POPULATION_SIZE; i++) {
-            walkers.add(new Walker(random));
+        for (int i = 0; i < config.POPULATION_SIZE; i++) {
+            walkers.add(new Walker(config, random));
         }
         
         running = true;
@@ -135,7 +153,7 @@ public class Main extends JFrame {
         
         
         if (walkers.get(activeWalkerIndex).alive == false
-                || time >= walkers.get(activeWalkerIndex).lastDistanceRecordTime + Config.EVAL_TIME_OUT) {
+                || time >= walkers.get(activeWalkerIndex).lastDistanceRecordTime + config.EVAL_TIME_OUT) {
             Walker lastWalker = walkers.get(activeWalkerIndex);
             
             if (lastWalker.travelledMax > distanceRecord) distanceRecord = lastWalker.travelledMax;
@@ -198,10 +216,10 @@ public class Main extends JFrame {
                 distanceTotalGeneration = 0.0;
                 distanceRecordGeneration = 0.0;
                 activeWalkerIndex = 0;
-                if (Config.RENEW_WORLD_EVERY_GENERATION) {
-                    world = new World(random.nextLong(), Config.WORLD_OCTAVES, Config.WORLD_FREQUENCY);
+                if (config.RENEW_WORLD_EVERY_GENERATION) {
+                    world = new World(config, random.nextLong());
                 }
-                walkers = GeneticAlgorithm.createPopulation(random, walkers);
+                walkers = GeneticAlgorithm.createPopulation(config, random, walkers);
                 
             }
         }

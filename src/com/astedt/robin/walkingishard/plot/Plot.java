@@ -6,6 +6,7 @@
 package com.astedt.robin.walkingishard.plot;
 
 import com.astedt.robin.walkingishard.Config;
+import com.astedt.robin.walkingishard.Main;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -26,7 +27,7 @@ public class Plot extends JFrame {
     private PlotDrawingComponent dc;
     private double maxValue;
     
-    public Plot(String[] labels, Color[] colors) {
+    public Plot(Config config, String[] labels, Color[] colors) {
         maxValue = 0.0;
         this.labels = labels;
         this.colors = colors;
@@ -37,7 +38,7 @@ public class Plot extends JFrame {
         dc = new PlotDrawingComponent(data, labels, colors);
         setTitle("Walking is hard: Plot");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        dc.setPreferredSize(new Dimension(Config.WIDTH, Config.HEIGHT));
+        dc.setPreferredSize(new Dimension(config.WIDTH, config.HEIGHT));
         add(dc);
         setResizable(true);
         pack();

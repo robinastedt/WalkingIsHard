@@ -18,7 +18,7 @@ public class Genome {
     
     private final List<Gene> genes;
     
-    public Genome(int splitPoint, Genome g1, Genome g2) {
+    public Genome(Config config, int splitPoint, Genome g1, Genome g2) {
         if (splitPoint >= Math.min(g1.getSize(), g2.getSize())) {
             throw new IllegalArgumentException("Split point does not fit inside both genomes!");
         }
@@ -32,13 +32,13 @@ public class Genome {
         }
     }
     
-    public Genome(Random random) {
+    public Genome(Config config, Random random) {
         genes = new ArrayList<>();
         
-        genes.add(new Gene(random, 0));
+        genes.add(new Gene(config, random, 0));
         int geneId = 1;
-        while (random.nextInt(Config.RANDOM_GENOME_ADD_JOINT_RATIO) > 0) {
-            genes.add(new Gene(random, geneId));
+        while (random.nextInt(config.RANDOM_GENOME_ADD_JOINT_RATIO) > 0) {
+            genes.add(new Gene(config, random, geneId));
             geneId++;
         }
     }

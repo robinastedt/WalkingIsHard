@@ -17,7 +17,7 @@ import java.util.Random;
  * @author Robin
  */
 public class GeneticAlgorithm {
-    public static List<Walker> createPopulation(Random random, List<Walker> oldWalkers) {
+    public static List<Walker> createPopulation(Config config, Random random, List<Walker> oldWalkers) {
         List<Walker> newWalkers = new ArrayList<>();
         
         oldWalkers.sort(null);
@@ -27,9 +27,9 @@ public class GeneticAlgorithm {
         double[] fitnessThresholds = new double[oldWalkers.size()];
         int i = 0;
         for (Walker walker : oldWalkers){
-            totalFitness += Config.FITNESS_BASE
+            totalFitness += config.FITNESS_BASE
                     + walker.travelledMax
-                    + Config.FITNESS_SPEED_FACTOR * walker.travelledMax / (walker.lastDistanceRecordTime + 1);
+                    + config.FITNESS_SPEED_FACTOR * walker.travelledMax / (walker.lastDistanceRecordTime + 1);
             fitnessThresholds[i++] = totalFitness;
         }
         
@@ -63,49 +63,49 @@ public class GeneticAlgorithm {
             Genome genome2 = walker2.genome;
             
             int splitPoint = random.nextInt(Math.min(genome1.getSize(), genome2.getSize()));
-            Genome newGenome1 = new Genome(splitPoint, genome1, genome2);
-            Genome newGenome2 = new Genome(splitPoint, genome2, genome1);
+            Genome newGenome1 = new Genome(config, splitPoint, genome1, genome2);
+            Genome newGenome2 = new Genome(config, splitPoint, genome2, genome1);
             
-            newGenome1 = mutateGenome(random, newGenome1);
-            newGenome2 = mutateGenome(random, newGenome2);
+            newGenome1 = mutateGenome(config, random, newGenome1);
+            newGenome2 = mutateGenome(config, random, newGenome2);
             
-            newWalkers.add(new Walker(newGenome1));
-            newWalkers.add(new Walker(newGenome2));
+            newWalkers.add(new Walker(config, newGenome1));
+            newWalkers.add(new Walker(config, newGenome2));
             
         }
         
         return newWalkers;
     }
     
-    private static Genome mutateGenome(Random random, Genome g) {
-        if (random.nextDouble() < Config.MUTATION_REMOVE_GENE && g.getSize() > 1) {
+    private static Genome mutateGenome(Config config, Random random, Genome g) {
+        if (random.nextDouble() < config.MUTATION_REMOVE_GENE && g.getSize() > 1) {
             g.removeGene(g.getSize()-1);
         }
         
-        if (random.nextDouble() < Config.MUTATION_ADD_GENE) {
-            Gene gene = new Gene(random, g.getSize());
+        if (random.nextDouble() < config.MUTATION_ADD_GENE) {
+            Gene gene = new Gene(config, random, g.getSize());
             g.addGene(gene);
         }
         
         for (int i = 0; i < g.getSize(); i++) {
             Gene gene = g.getGene(i);
             
-            if (random.nextDouble() < Config.MUTATION_CHANGE_POSITION) {
+            if (random.nextDouble() < config.MUTATION_CHANGE_POSITION) {
                 gene.x = Util.getRandomRange(random, -1.0, 1.0);
                 gene.y = Util.getRandomRange(random, -1.0, 1.0);
             }
             
             for (int j = 0; j < gene.id; j++) {
-                if (random.nextDouble() < Config.MUTATION_CHANGE_CONNECTION) {
+                if (random.nextDouble() < config.MUTATION_CHANGE_CONNECTION) {
                     gene.connections[j] ^= true;
                 }
-                if (random.nextDouble() < Config.MUTATION_CHANGE_FREQUENCY) {
-                    gene.frequencies[j] = Util.getRandomRange(random, 0.0, Config.WALKER_MUSCLE_FREQUENCY_MAX);
+                if (random.nextDouble() < config.MUTATION_CHANGE_FREQUENCY) {
+                    gene.frequencies[j] = Util.getRandomRange(random, 0.0, config.WALKER_MUSCLE_FREQUENCY_MAX);
                 }
-                if (random.nextDouble() < Config.MUTATION_CHANGE_PHASE) {
+                if (random.nextDouble() < config.MUTATION_CHANGE_PHASE) {
                     gene.phases[j] = Util.getRandomRange(random, 0.0, 2 * Math.PI);
                 }
-                if (random.nextDouble() < Config.MUTATION_CHANGE_STRENGTH) {
+                if (random.nextDouble() < config.MUTATION_CHANGE_STRENGTH) {
                     gene.strengths[j] = Util.getRandomRange(random, 0.0, 1.0);
                 }
             }

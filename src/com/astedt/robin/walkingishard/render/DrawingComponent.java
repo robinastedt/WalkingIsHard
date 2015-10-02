@@ -21,15 +21,18 @@ import javax.swing.JComponent;
  * @author robin
  */
 public class DrawingComponent extends JComponent {
-    
-    private final Main main;
+
     private final Font fontStats;
+    private Main main;
+    private Config config;
     
-    private double xScroll = Config.WALKER_SPAWN_X;
+    private double xScroll;
     public double xScrollOffset = 0.0;
     
-    public DrawingComponent(Main main) {
+    public DrawingComponent(Main main, Config config) {
         this.main = main;
+        this.config = config;
+        xScroll = config.WALKER_SPAWN_X;
         fontStats = new Font("Courier New", Font.PLAIN, 14);
     }
     
@@ -56,7 +59,7 @@ public class DrawingComponent extends JComponent {
                         + (int)(scale * (Math.ceil(xScroll - 1.0) - xScroll)) 
                         - segmentLineWidth / 2;
                 g.fillRect(segmentLineDrawX, 0, segmentLineWidth, segmentLineHeight);
-                g.drawString(Integer.toString((int)Math.ceil(xScroll - 1.0 - Config.WALKER_SPAWN_X)), segmentLineDrawX, segmentLineHeight+fontStats.getSize());
+                g.drawString(Integer.toString((int)Math.ceil(xScroll - 1.0 - config.WALKER_SPAWN_X)), segmentLineDrawX, segmentLineHeight+fontStats.getSize());
 
                 g.setColor(Color.GRAY);
                 int segment2LineWidth = (int)(scale * 0.025);
@@ -65,7 +68,7 @@ public class DrawingComponent extends JComponent {
                         + (int)(scale * (Math.ceil(xScroll) - xScroll)) 
                         - segment2LineWidth / 2;
                 g.fillRect(segment2LineDrawX, 0, segment2LineWidth, segment2LineHeight);
-                g.drawString(Integer.toString((int)Math.ceil(xScroll + 0.0 - Config.WALKER_SPAWN_X)), segment2LineDrawX, segment2LineHeight+fontStats.getSize());
+                g.drawString(Integer.toString((int)Math.ceil(xScroll + 0.0 - config.WALKER_SPAWN_X)), segment2LineDrawX, segment2LineHeight+fontStats.getSize());
 
                 g.setColor(Color.GRAY);
                 int segment3LineWidth = (int)(scale * 0.025);
@@ -74,7 +77,7 @@ public class DrawingComponent extends JComponent {
                         + (int)(scale * (Math.ceil(xScroll + 1.0) - xScroll)) 
                         - segment3LineWidth / 2;
                 g.fillRect(segment3LineDrawX, 0, segment3LineWidth, segment3LineHeight);
-                g.drawString(Integer.toString((int)Math.ceil(xScroll + 1.0 - Config.WALKER_SPAWN_X)), segment3LineDrawX, segment3LineHeight+fontStats.getSize());
+                g.drawString(Integer.toString((int)Math.ceil(xScroll + 1.0 - config.WALKER_SPAWN_X)), segment3LineDrawX, segment3LineHeight+fontStats.getSize());
 
                 g.setColor(Color.GRAY);
                 int segment4LineWidth = (int)(scale * 0.025);
@@ -83,13 +86,13 @@ public class DrawingComponent extends JComponent {
                         + (int)(scale * (Math.ceil(xScroll + 2.0) - xScroll)) 
                         - segment4LineWidth / 2;
                 g.fillRect(segment4LineDrawX, 0, segment4LineWidth, segment4LineHeight);
-                g.drawString(Integer.toString((int)Math.ceil(xScroll + 2.0 - Config.WALKER_SPAWN_X)), segment4LineDrawX, segment4LineHeight+fontStats.getSize());
+                g.drawString(Integer.toString((int)Math.ceil(xScroll + 2.0 - config.WALKER_SPAWN_X)), segment4LineDrawX, segment4LineHeight+fontStats.getSize());
 
                 g.setColor(Color.WHITE);
                 int startLineWidth = (int)(scale * 0.05);
                 int startLineHeight = (int)(scale * 0.2);
                 int startLineDrawX = scale 
-                        + (int)(scale * (Config.WALKER_SPAWN_X - xScroll)) 
+                        + (int)(scale * (config.WALKER_SPAWN_X - xScroll)) 
                         - startLineWidth / 2;
                 g.fillRect(startLineDrawX, 0, startLineWidth, startLineHeight);
 
@@ -97,7 +100,7 @@ public class DrawingComponent extends JComponent {
                 int travelledMaxLineWidth = (int)(scale * 0.05);
                 int travelledMaxLineHeight = (int)(scale * 0.15);
                 int travelledMaxLineDrawX = scale 
-                        + (int)(scale * (Config.WALKER_SPAWN_X + walker.travelledMax - xScroll)) 
+                        + (int)(scale * (config.WALKER_SPAWN_X + walker.travelledMax - xScroll)) 
                         - travelledMaxLineWidth / 2;
                 g.fillRect(travelledMaxLineDrawX, 0, travelledMaxLineWidth, travelledMaxLineHeight);
                 
@@ -113,7 +116,7 @@ public class DrawingComponent extends JComponent {
                 int bestPositionLineWidth = (int)(scale * 0.05);
                 int bestPositionLineHeight = (int)(scale * 0.15);
                 int bestPositionLineDrawX = scale 
-                        + (int)(scale * (Config.WALKER_SPAWN_X + main.distanceRecord - xScroll)) 
+                        + (int)(scale * (config.WALKER_SPAWN_X + main.distanceRecord - xScroll)) 
                         - bestPositionLineWidth / 2;
                 g.fillRect(bestPositionLineDrawX, 0, bestPositionLineWidth, bestPositionLineHeight);
 

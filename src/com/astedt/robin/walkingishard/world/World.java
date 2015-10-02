@@ -16,6 +16,7 @@ import java.util.Random;
  */
 public class World {
     
+    private Config config;
     private long seed;
     private List<Double> points;
     private List<Double>[] octavePoints;
@@ -24,13 +25,12 @@ public class World {
     private double frequency;
     private double wavelength;
     
-    public World(long seed, int octaves, double frequency) {
-        if (octaves <= 0) throw new IllegalArgumentException("Octaves must be greater than 0! Octaves: " + octaves);
-        if (frequency <= 0) throw new IllegalArgumentException("Frequency must be greater than 0! Frequency: " + frequency);
+    public World(Config config, long seed) {
         
+        this.config = config;
         this.seed = seed;
-        this.octaves = octaves;
-        this.frequency = frequency;
+        this.octaves = config.WORLD_OCTAVES;
+        this.frequency = config.WORLD_FREQUENCY;
         wavelength = 1 / frequency;
         rngs = new Random[octaves];
         octavePoints = new List[octaves];
@@ -47,7 +47,7 @@ public class World {
         int x1 = (int)xScaled;
         int x2 = x1 + 1;
         double weight = (xScaled - x1);
-        return Math.atan((x - Config.WALKER_SPAWN_X)) / Math.PI * 2  * ((1.0 - weight) * getIntPoint(x1) + weight * getIntPoint(x2));
+        return Math.atan((x - config.WALKER_SPAWN_X)) / Math.PI * 2  * ((1.0 - weight) * getIntPoint(x1) + weight * getIntPoint(x2));
         //return ((1.0 - weight) * getIntPoint(x1) + weight * getIntPoint(x2));
     }
     
@@ -80,10 +80,10 @@ public class World {
     }
     
     public double getFrequency(double x) {
-        return frequency * (x / Config.WORLD_FREQUENCY_DISTANCE_RATIO + 1.0);
+        return frequency * (x / config.WORLD_FREQUENCY_DISTANCE_RATIO + 1.0);
     }
     
     public double getWavelength(double x) {
-        return wavelength / (x / Config.WORLD_FREQUENCY_DISTANCE_RATIO + 1.0);
+        return wavelength / (x / config.WORLD_FREQUENCY_DISTANCE_RATIO + 1.0);
     }
 }

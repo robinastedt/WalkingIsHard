@@ -13,11 +13,13 @@ import java.awt.event.KeyEvent;
  * @author robin
  */
 public class KeyHandler extends KeyAdapter {
-    
+
     private Main main;
+    private Config config;
     
-    public KeyHandler(Main main) {
+    public KeyHandler(Main main, Config config) {
         this.main = main;
+        this.config = config;
     }
     
     @Override
@@ -30,7 +32,7 @@ public class KeyHandler extends KeyAdapter {
             main.render ^= true;
         }
         else if (keyCode == KeyEvent.VK_LEFT) {
-            if (main.dc.xScrollOffset > -Config.WALKER_SPAWN_X + 1.1) {
+            if (main.dc.xScrollOffset > -config.WALKER_SPAWN_X + 1.1) {
                 main.dc.xScrollOffset -= 0.1;
             }
         }

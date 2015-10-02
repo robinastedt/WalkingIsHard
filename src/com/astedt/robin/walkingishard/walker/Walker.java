@@ -20,6 +20,8 @@ import java.util.Random;
  */
 public class Walker implements Comparable {
     
+    private Config config;
+    
     public final Genome genome;
     public final List<Joint> joints;
     public final List<Muscle> muscles;
@@ -32,11 +34,12 @@ public class Walker implements Comparable {
     
     public boolean alive;
     
-    public Walker(Random random) {
-        this(new Genome(random));
+    public Walker(Config config, Random random) {
+        this(config, new Genome(config, random));
     }
     
-    public Walker(Genome genome) {
+    public Walker(Config config, Genome genome) {
+        this.config = config;
         alive = true;
         travelledMax = 0.0;
         this.genome = genome;
@@ -47,13 +50,12 @@ public class Walker implements Comparable {
         for (int id = 0; id < genomeSize; id++) {
             Gene gene = genome.getGene(id);
             
-            Joint joint = new Joint(id, gene.x * Config.WALKER_SIZE_RATIO + Config.WALKER_SPAWN_X, gene.y * Config.WALKER_SIZE_RATIO + Config.WALKER_SPAWN_Y, gene.r);
+            Joint joint = new Joint(id, gene.x * config.WALKER_SIZE_RATIO + config.WALKER_SPAWN_X,
+                    gene.y * config.WALKER_SIZE_RATIO + config.WALKER_SPAWN_Y, gene.r);
             
             
             joints.add(joint);
-            
-            
-            
+
             if (id > 0) {
                 for (int m = 0; m < id; m++) {
                     if (gene.connections[m]) {
@@ -106,7 +108,7 @@ public class Walker implements Comparable {
         xTotal /= joints.size();
         
         for (Joint joint : joints) {
-            joint.x += (Config.WALKER_SPAWN_X - xTotal);
+            joint.x += (config.WALKER_SPAWN_X - xTotal);
         }
         
     }
@@ -128,22 +130,22 @@ public class Walker implements Comparable {
             double dv = Math.sqrt(dxv * dxv + dyv * dyv);
             
             //Apply force towards or from each other depending on muscle strain
-            joint1.xv += dx / length * lengthDiff * muscle.strength * Config.WALKER_MUSCLE_FORCE_MULTIPLIER;
-            joint1.yv += dy / length * lengthDiff * muscle.strength * Config.WALKER_MUSCLE_FORCE_MULTIPLIER;
-            joint2.xv -= dx / length * lengthDiff * muscle.strength * Config.WALKER_MUSCLE_FORCE_MULTIPLIER;
-            joint2.yv -= dy / length * lengthDiff * muscle.strength * Config.WALKER_MUSCLE_FORCE_MULTIPLIER;
+            joint1.xv += dx / length * lengthDiff * muscle.strength * config.WALKER_MUSCLE_FORCE_MULTIPLIER;
+            joint1.yv += dy / length * lengthDiff * muscle.strength * config.WALKER_MUSCLE_FORCE_MULTIPLIER;
+            joint2.xv -= dx / length * lengthDiff * muscle.strength * config.WALKER_MUSCLE_FORCE_MULTIPLIER;
+            joint2.yv -= dy / length * lengthDiff * muscle.strength * config.WALKER_MUSCLE_FORCE_MULTIPLIER;
             
             
             //Dampen relative speed in the direction towards each other
-            joint1.xv -= Math.abs(dx) / length * dxv * Config.MUSCLE_DAMPENING;
-            joint1.yv -= Math.abs(dy) / length * dyv * Config.MUSCLE_DAMPENING;
-            joint2.xv += Math.abs(dx) / length * dxv * Config.MUSCLE_DAMPENING;
-            joint2.yv += Math.abs(dy) / length * dyv * Config.MUSCLE_DAMPENING;
+            joint1.xv -= Math.abs(dx) / length * dxv * config.MUSCLE_DAMPENING;
+            joint1.yv -= Math.abs(dy) / length * dyv * config.MUSCLE_DAMPENING;
+            joint2.xv += Math.abs(dx) / length * dxv * config.MUSCLE_DAMPENING;
+            joint2.yv += Math.abs(dy) / length * dyv * config.MUSCLE_DAMPENING;
             
         }
         
         for (Joint joint : joints) {
-            joint.yv += Config.GRAVITY;
+            joint.yv += config.GRAVITY;
         }
         
         // Change position
@@ -182,16 +184,16 @@ public class Walker implements Comparable {
                         joint2.y += dy / d * f / 2;
                         
                         //Dampen relative speed in the direction towards each other
-                        joint.xv -= dx / d * dv * Config.COLLISION_ENERGY_CONSERVATION;
-                        joint.yv -= dy / d * dv * Config.COLLISION_ENERGY_CONSERVATION;
-                        joint2.xv += dx / d * dv * Config.COLLISION_ENERGY_CONSERVATION;
-                        joint2.yv += dy / d * dv * Config.COLLISION_ENERGY_CONSERVATION;
+                        joint.xv -= dx / d * dv * config.COLLISION_ENERGY_CONSERVATION;
+                        joint.yv -= dy / d * dv * config.COLLISION_ENERGY_CONSERVATION;
+                        joint2.xv += dx / d * dv * config.COLLISION_ENERGY_CONSERVATION;
+                        joint2.yv += dy / d * dv * config.COLLISION_ENERGY_CONSERVATION;
                         
                         //Apply friction perpendicular to each other
-                        joint.xv -= Math.abs(dy) / d * dxv * Config.FRICTION;
-                        joint.yv -= Math.abs(dx) / d * dyv * Config.FRICTION;
-                        joint2.xv -= Math.abs(dy) / d * -dxv * Config.FRICTION;
-                        joint2.yv -= Math.abs(dx) / d * -dyv * Config.FRICTION;
+                        joint.xv -= Math.abs(dy) / d * dxv * config.FRICTION;
+                        joint.yv -= Math.abs(dx) / d * dyv * config.FRICTION;
+                        joint2.xv -= Math.abs(dy) / d * -dxv * config.FRICTION;
+                        joint2.yv -= Math.abs(dx) / d * -dyv * config.FRICTION;
                         
                     }
                 }
@@ -200,15 +202,15 @@ public class Walker implements Comparable {
             // Collision left boundary
             if (joint.x-joint.r < 0.0) {
                 joint.x = joint.r;
-                joint.xv = -joint.xv * Config.COLLISION_ENERGY_CONSERVATION;
-                joint.yv -= joint.yv * Config.FRICTION;
+                joint.xv = -joint.xv * config.COLLISION_ENERGY_CONSERVATION;
+                joint.yv -= joint.yv * config.FRICTION;
             }
             // Collision floor
             if (joint.y + joint.r > world.getPoint(joint.x)) {
                 joint.y = world.getPoint(joint.x) - joint.r;
-                joint.yv = -joint.yv * Config.COLLISION_ENERGY_CONSERVATION;
-                joint.xv -= joint.xv * Config.FRICTION;
-                if (Config.KILL_ON_HEAD_COLLISION && joint.id == 0) {
+                joint.yv = -joint.yv * config.COLLISION_ENERGY_CONSERVATION;
+                joint.xv -= joint.xv * config.FRICTION;
+                if (config.KILL_ON_HEAD_COLLISION && joint.id == 0) {
                     alive = false;
                 }
             }
@@ -223,7 +225,7 @@ public class Walker implements Comparable {
             xTotal += joint.x;
         }
         xTotal /= joints.size();
-        xTotal -= Config.WALKER_SPAWN_X;
+        xTotal -= config.WALKER_SPAWN_X;
         if (xTotal > travelledMax) {
             travelledMax = xTotal;
             lastDistanceRecordTime = time;
