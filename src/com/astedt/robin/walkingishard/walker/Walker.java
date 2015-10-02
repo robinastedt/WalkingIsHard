@@ -10,6 +10,7 @@ import com.astedt.robin.walkingishard.genetics.Gene;
 import com.astedt.robin.walkingishard.genetics.Genome;
 import com.astedt.robin.walkingishard.util.BooleanMatrix;
 import com.astedt.robin.walkingishard.world.World;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -18,7 +19,7 @@ import java.util.Random;
  *
  * @author robin
  */
-public class Walker implements Comparable {
+public class Walker implements Comparable, Serializable {
     
     private Config config;
     

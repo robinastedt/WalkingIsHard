@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.Properties;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -21,7 +22,7 @@ import nu.studer.java.util.OrderedProperties;
  *
  * @author robin
  */
-public class Config {
+public class Config implements Serializable {
     public int WIDTH = 800;
     public int HEIGHT = 600;
     
@@ -117,14 +118,14 @@ public class Config {
             prop.store(output, null);
 	} 
         catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, ex.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
 	}
         finally {
             if (output != null) {
                 try {
                     output.close();
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
                 }
             }
 	}
@@ -183,15 +184,21 @@ public class Config {
 
 	} 
         catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Could not read file \"" + filename + "\"!\n"
+            if (Main.noGraphics) {
+                System.out.println("Could not read file \"" + filename + "\"!\n"
+                    + "The file will now be created with default values.");
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Could not read file \"" + filename + "\"!\n"
                     + "The file will now be created with default values.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
 	} 
         finally {
             if (input != null) {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
                 }
             }
 	}

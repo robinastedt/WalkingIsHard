@@ -6,6 +6,7 @@
 package com.astedt.robin.walkingishard.genetics;
 
 import com.astedt.robin.walkingishard.Config;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,7 +15,7 @@ import java.util.Random;
  *
  * @author Robin
  */
-public class Genome {
+public class Genome implements Serializable {
     
     private final List<Gene> genes;
     

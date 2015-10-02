@@ -5,11 +5,13 @@
  */
 package com.astedt.robin.walkingishard.walker;
 
+import java.io.Serializable;
+
 /**
  *
  * @author robin
  */
-public class Muscle {
+public class Muscle implements Serializable {
     public final Joint joint1, joint2;
     public final double frequency;
     public final double phase;

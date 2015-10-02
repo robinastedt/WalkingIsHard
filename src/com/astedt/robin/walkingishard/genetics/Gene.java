@@ -4,6 +4,7 @@ package com.astedt.robin.walkingishard.genetics;
 import com.astedt.robin.walkingishard.Config;
 import com.astedt.robin.walkingishard.Main;
 import com.astedt.robin.walkingishard.util.Util;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -11,7 +12,7 @@ import java.util.Random;
  *
  * @author Robin
  */
-public class Gene {
+public class Gene implements Serializable {
     
     private Config config;
     

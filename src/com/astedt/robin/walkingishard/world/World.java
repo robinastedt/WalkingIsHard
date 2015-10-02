@@ -6,6 +6,7 @@
 package com.astedt.robin.walkingishard.world;
 
 import com.astedt.robin.walkingishard.Config;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,7 +15,7 @@ import java.util.Random;
  *
  * @author robin
  */
-public class World {
+public class World implements Serializable {
     
     private Config config;
     private long seed;

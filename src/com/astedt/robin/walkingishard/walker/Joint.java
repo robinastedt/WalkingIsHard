@@ -1,13 +1,15 @@
 
 package com.astedt.robin.walkingishard.walker;
 
+import java.io.Serializable;
+
 /**
  *
  * @author robin
  * 
  */
 
-public class Joint {
+public class Joint implements Serializable {
     public final int id;
     public double x, y, r, xv, yv;
     
