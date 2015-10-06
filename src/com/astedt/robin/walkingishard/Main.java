@@ -35,7 +35,7 @@ public class Main implements Serializable {
     public int activeWalkerIndex;
     public World world;
     public transient JFrame window;
-    public DrawingComponent dc;
+    public transient DrawingComponent dc;
     private Plot plot;
     private Config config;
     private long time;
@@ -127,7 +127,13 @@ public class Main implements Serializable {
             main = new Main(config);
         }
         
-        if (!noGraphics) main.createWindow();
+        if (!noGraphics) {
+            main.createWindow();
+            main.timeSlow = true;
+        }
+        else {
+            main.timeSlow = false;
+        }
         main.run();
     }
     
@@ -161,6 +167,7 @@ public class Main implements Serializable {
                 step();
             }
             if (render) window.repaint();
+            
             if (timeSlow) {
                 try {
                     Thread.sleep(20);
@@ -179,8 +186,7 @@ public class Main implements Serializable {
         
         random = new Random();
         time = 0;
-        if (noGraphics) timeSlow = false;
-        else timeSlow = true;
+        timeSlow = true;
         render = false;
         world = new World(config, random.nextLong());
         activeWalkerIndex = 0;
@@ -267,7 +273,7 @@ public class Main implements Serializable {
                         + "," + distanceRecordGeneration
                         + "," + distanceRecord
                         + "";
-                System.out.println(genOutput);
+                    System.out.println(genOutput);
                 }
                 
                 generation++;
