@@ -52,12 +52,16 @@ public class Main implements Serializable {
     //Session paramters
     private static boolean saving;
     private static String saveFilename;
+    private static int saveInterval;
+    private static int saveCounter;
     private static boolean loading;
     private static String loadFilename;
+    private static boolean keepOldSaves;
     private static boolean noPrint;
     public static boolean noGraphics;
     
-    private static final String usage = "Usage: help | nographics | noprint | save [filename] | load [filename] | loadsave [filename]\n"
+    private static final String usage 
+            = "Usage: help | nographics | noprint | save [filename] | load [filename] | loadsave [filename] | saveinterval [interval > 0] | keepoldsaves\n"
             + "Tip: When using nographics, run with java -jar WalkingIsHard.jar. "
             + "Otherwise you won't get printouts in the console and you'll have to manually terminate the application.";
     
@@ -65,8 +69,11 @@ public class Main implements Serializable {
         
         saving = false;
         loading = false;
+        keepOldSaves = false;
         noPrint = false;
         noGraphics = false;
+        saveInterval = 10;
+        saveCounter = 0;
         
         if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
             System.out.println(usage);
@@ -102,6 +109,24 @@ public class Main implements Serializable {
                 saving = true;
                 loadFilename = args[i];
                 saveFilename = args[i];
+            }
+            else if (args[i].equalsIgnoreCase("saveinterval")) {
+                i++;
+                if (args.length <= i) {
+                    System.out.println("Usage: saveinterval [interval > 0]");
+                    System.exit(1);
+                }
+                try {
+                    saveInterval = Integer.parseInt(args[i]);
+                    if (saveInterval < 1) throw new NumberFormatException();
+                }
+                catch (NumberFormatException nfe) {
+                    System.out.println("Usage: saveinterval: [interval > 0]");
+                    System.exit(1);
+                }
+            }
+            else if (args[i].equalsIgnoreCase("keepoldsaves")) {
+                keepOldSaves = true;
             }
             else if (args[i].equalsIgnoreCase("noprint")) {
                 noPrint = true;
@@ -160,7 +185,10 @@ public class Main implements Serializable {
     
     private void run() {
         
-        if (saving) save(saveFilename);
+        if (saving) {
+            save(saveFilename);
+            saveCounter = saveInterval;
+        }
         
         while (running) {
             synchronized (this) {
@@ -222,12 +250,9 @@ public class Main implements Serializable {
     }
     
     private void step() {
-        
-        
+
         walkers.get(activeWalkerIndex).step(time, world);
         time++;
-        
-        
         
         if (walkers.get(activeWalkerIndex).alive == false
                 || time >= walkers.get(activeWalkerIndex).lastDistanceRecordTime + config.EVAL_TIME_OUT) {
@@ -241,15 +266,7 @@ public class Main implements Serializable {
             else recordRatio = lastWalker.travelledMax / distanceRecord;
             
             distanceTotalGeneration += lastWalker.travelledMax;
-            /*
-            System.out.println(
-                    "Walker " + String.format("%3d", activeWalkerIndex) 
-                    + " (j" + String.format("%3d", lastWalker.joints.size())
-                    + ", m" + String.format("%3d", lastWalker.muscles.size()) + "): "
-                    + "steps: " + time + ", "
-                    + "distance: " + String.format( "%.5f",lastWalker.travelledMax) + " ("
-                    + String.format("%2.3f", recordRatio * 100) + "%)");
-            */
+            
             time = 0;
             activeWalkerIndex++;
             if (activeWalkerIndex >= walkers.size()) {
@@ -267,7 +284,7 @@ public class Main implements Serializable {
                 
                 if (!noPrint) {
                     String genOutput 
-                        = "" + (generation+1) 
+                        = "" + (generation) 
                         + "," + distanceAverageGeneration
                         + "," + distanceAverageGenerationRecord
                         + "," + distanceRecordGeneration
@@ -286,20 +303,34 @@ public class Main implements Serializable {
                     world = new World(config, random.nextLong());
                 }
                 walkers = GeneticAlgorithm.createPopulation(config, random, walkers);
+                
+                
                 if (saving) {
-                    save(saveFilename);
+                    saveCounter--;
+                    if (saveCounter == 0) {
+                        save(saveFilename);
+                        saveCounter = saveInterval;
+                    }
                 }
             }
         }
     }
     
     public void save(String filename) {
+        if (!noPrint) System.out.print("Saving...  ");
         try {
             FileOutputStream fileOut = new FileOutputStream(filename);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(this);
             out.close();
+            fileOut.close();
+            if (keepOldSaves) {
+                fileOut = new FileOutputStream(filename + "." + String.format("%06d", generation));
+                out = new ObjectOutputStream(fileOut);
+                out.writeObject(this);
+                out.close();
                 fileOut.close();
+            }
         } 
         catch (IOException i) {
             i.printStackTrace();
